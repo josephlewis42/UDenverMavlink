@@ -123,10 +123,11 @@
                <description>Laser altimeter distance</description>
                <field type="float" name="dist"/>
           </message>
-          
 		<message id="230" name="UDENVER_CPU_USAGE">
-		   <description>Autopilot System CPU Usage</description>
+		   <description>Autopilot System Resource Usage</description>
 		   <field type="float" name="cpu_usage"/>
+		   <field type="uint16_t" name="mem_total_kb"/>
+		   <field type="uint16_t" name="mem_free_kb"/>
 		</message>
      </messages>
 </mavlink>
