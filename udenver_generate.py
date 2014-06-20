@@ -7,6 +7,7 @@ from mavgen import *
 
 XML_FILE = "message_definitions/ualberta.xml"
 OUTPUT_FOLDER = "include/"
+TEST_OUTPUT = "include/ualberta/mavlink.h"
 LANGUAGE = "C"
 PROTOCOL = "1.0"
 ERROR_LIMIT = 5
@@ -40,4 +41,4 @@ def generateHeaders():
 
 
 if __name__ == "__main__":
-		exit( generateHeaders())
+	exit( generateHeaders())

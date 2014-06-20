@@ -541,10 +541,14 @@ static void mavlink_test_udenver_cpu_usage(uint8_t system_id, uint8_t component_
         uint16_t i;
 	mavlink_udenver_cpu_usage_t packet_in = {
 		17.0,
+	}17443,
+	}17547,
 	};
 	mavlink_udenver_cpu_usage_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         	packet1.cpu_usage = packet_in.cpu_usage;
+        	packet1.mem_total_kb = packet_in.mem_total_kb;
+        	packet1.mem_free_kb = packet_in.mem_free_kb;
         
         
 
@@ -554,12 +558,12 @@ static void mavlink_test_udenver_cpu_usage(uint8_t system_id, uint8_t component_
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_udenver_cpu_usage_pack(system_id, component_id, &msg , packet1.cpu_usage );
+	mavlink_msg_udenver_cpu_usage_pack(system_id, component_id, &msg , packet1.cpu_usage , packet1.mem_total_kb , packet1.mem_free_kb );
 	mavlink_msg_udenver_cpu_usage_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_udenver_cpu_usage_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.cpu_usage );
+	mavlink_msg_udenver_cpu_usage_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.cpu_usage , packet1.mem_total_kb , packet1.mem_free_kb );
 	mavlink_msg_udenver_cpu_usage_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -572,7 +576,7 @@ static void mavlink_test_udenver_cpu_usage(uint8_t system_id, uint8_t component_
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_udenver_cpu_usage_send(MAVLINK_COMM_1 , packet1.cpu_usage );
+	mavlink_msg_udenver_cpu_usage_send(MAVLINK_COMM_1 , packet1.cpu_usage , packet1.mem_total_kb , packet1.mem_free_kb );
 	mavlink_msg_udenver_cpu_usage_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
