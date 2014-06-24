@@ -5,9 +5,7 @@ sys.path.append(os.path.join('pymavlink','generator'))
 from mavgen import *
 
 
-XML_FILE = "message_definitions/ualberta.xml"
 OUTPUT_FOLDER = "include/"
-TEST_OUTPUT = "include/ualberta/mavlink.h"
 LANGUAGE = "C"
 PROTOCOL = "1.0"
 ERROR_LIMIT = 5
@@ -25,20 +23,38 @@ class MavgenOptions:
         self.error_limit = error_limit;
 
 
-def generateHeaders():
-	# Generate headers
-	opts = MavgenOptions(LANGUAGE, PROTOCOL, OUTPUT_FOLDER, ERROR_LIMIT);
-	args = [XML_FILE]
-	
-	try:
-		mavgen(opts,args)
-		return 0
-	except Exception as ex:
-		exStr = formatErrorMessage(str(ex));
-		
-		print exStr
-		return 1
+def generateHeaders(XML_FILE):
+
+    filename = XML_FILE.split("/")[-1][:-4]
+    outputpath = OUTPUT_FOLDER + filename + "/mavlink.h"
+
+    #print os.path.getmtime(outputpath)
+    #print os.path.getmtime(XML_FILE)
+
+    #try:
+    #    if os.path.getmtime(XML_FILE) < os.path.getmtime(outputpath):
+    #        print "NOTHING TO BE DONE FOR: " + XML_FILE + " already generated newer version"
+    #        return 0
+    #except OSError:
+    #    pass
+
+    # Generate headers
+    opts = MavgenOptions(LANGUAGE, PROTOCOL, OUTPUT_FOLDER, ERROR_LIMIT);
+    args = [XML_FILE]
+
+    try:
+        mavgen(opts,args)
+    except Exception as ex:
+        exStr = formatErrorMessage(str(ex));
+
+        print exStr
+        return 1
+    return 0
+
 
 
 if __name__ == "__main__":
-	exit( generateHeaders())
+    if len(sys.argv) < 2:
+        exit(1)
+
+    exit( generateHeaders(sys.argv[1]))

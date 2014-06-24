@@ -1,4 +1,9 @@
-all: mavlinkh
+SOURCES:= include/ualberta include/common
+OUTPUTS:=$(patsubst %.xml, include/%, %(SOURCES))
 
-mavlinkh:
-	python udenver_generate.py
+
+all: $(SOURCES)
+include/%:message_definitions/%.xml
+	python udenver_generate.py $<
+clean:
+	rm -rf $(SOURCES)
