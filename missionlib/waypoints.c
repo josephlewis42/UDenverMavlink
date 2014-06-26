@@ -1,26 +1,26 @@
 /*******************************************************************************
- 
+
  Copyright (C) 2011 Lorenz Meier lm ( a t ) inf.ethz.ch
- 
+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  ****************************************************************************/
 
 #include "waypoints.h"
 #include <math.h>
 
-bool debug = true;
+//bool debug = true;
 bool verbose = true;
 
 extern mavlink_wpm_storage wpm;
@@ -40,7 +40,7 @@ uint8_t mavlink_wpm_comp_id = MAV_COMP_ID_MISSIONPLANNER;
 void mavlink_wpm_init(mavlink_wpm_storage* state)
 {
 	// Set all waypoints to zero
-	
+
 	// Set count to zero
 	state->size = 0;
 	state->max_size = MAVLINK_WPM_MAX_WP_COUNT;
@@ -57,7 +57,7 @@ void mavlink_wpm_init(mavlink_wpm_storage* state)
 	state->pos_reached = false;						///< boolean for position reached
 	state->timestamp_lastoutside_orbit = 0;///< timestamp when the MAV was last outside the orbit or had the wrong yaw value
 	state->timestamp_firstinside_orbit = 0;///< timestamp when the MAV was the first time after a waypoint change inside the orbit and had the correct yaw value
-	
+
 }
 
 /*
@@ -67,16 +67,16 @@ void mavlink_wpm_send_waypoint_ack(uint8_t sysid, uint8_t compid, uint8_t type)
 {
     mavlink_message_t msg;
     mavlink_mission_ack_t wpa;
-	
+
     wpa.target_system = wpm.current_partner_sysid;
     wpa.target_component = wpm.current_partner_compid;
     wpa.type = type;
-	
+
     mavlink_msg_mission_ack_encode(mavlink_system.sysid, mavlink_wpm_comp_id, &msg, &wpa);
     mavlink_missionlib_send_message(&msg);
-	
+
     // FIXME TIMING usleep(paramClient->getParamValue("PROTOCOLDELAY"));
-	
+
     if (MAVLINK_WPM_TEXT_FEEDBACK)
 	{
 #ifdef MAVLINK_WPM_NO_PRINTF
@@ -102,17 +102,17 @@ void mavlink_wpm_send_waypoint_current(uint16_t seq)
     if(seq < wpm.size)
     {
         mavlink_mission_item_t *cur = &(wpm.waypoints[seq]);
-		
+
         mavlink_message_t msg;
         mavlink_mission_current_t wpc;
-		
+
         wpc.seq = cur->seq;
-		
+
         mavlink_msg_mission_current_encode(mavlink_system.sysid, mavlink_wpm_comp_id, &msg, &wpc);
         mavlink_missionlib_send_message(&msg);
-		
+
         // FIXME TIMING usleep(paramClient->getParamValue("PROTOCOLDELAY"));
-		
+
         if (MAVLINK_WPM_TEXT_FEEDBACK) mavlink_missionlib_send_gcs_string("Set current waypoint\n"); //// printf("Broadcasted new current waypoint %u\n", wpc.seq);
     }
     else
@@ -150,16 +150,16 @@ void mavlink_wpm_send_waypoint_count(uint8_t sysid, uint8_t compid, uint16_t cou
 {
     mavlink_message_t msg;
     mavlink_mission_count_t wpc;
-	
+
     wpc.target_system = wpm.current_partner_sysid;
     wpc.target_component = wpm.current_partner_compid;
     wpc.count = count;
-	
+
     mavlink_msg_mission_count_encode(mavlink_system.sysid, mavlink_wpm_comp_id, &msg, &wpc);
     mavlink_missionlib_send_message(&msg);
-	
+
     if (MAVLINK_WPM_TEXT_FEEDBACK) mavlink_missionlib_send_gcs_string("Sent waypoint count"); //// if (verbose) // printf("Sent waypoint count (%u) to ID %u\n", wpc.count, wpc.target_system);
-	
+
     // FIXME TIMING usleep(paramClient->getParamValue("PROTOCOLDELAY"));
 }
 
@@ -174,7 +174,7 @@ void mavlink_wpm_send_waypoint(uint8_t sysid, uint8_t compid, uint16_t seq)
         mavlink_msg_mission_item_encode(mavlink_system.sysid, mavlink_wpm_comp_id, &msg, wp);
         mavlink_missionlib_send_message(&msg);
         if (MAVLINK_WPM_TEXT_FEEDBACK) mavlink_missionlib_send_gcs_string("Sent waypoint"); //// if (verbose) // printf("Sent waypoint %u to ID %u\n", wp->seq, wp->target_system);
-		
+
         // FIXME TIMING usleep(paramClient->getParamValue("PROTOCOLDELAY"));
     }
     else
@@ -195,7 +195,7 @@ void mavlink_wpm_send_waypoint_request(uint8_t sysid, uint8_t compid, uint16_t s
         mavlink_msg_mission_request_encode(mavlink_system.sysid, mavlink_wpm_comp_id, &msg, &wpr);
         mavlink_missionlib_send_message(&msg);
         if (MAVLINK_WPM_TEXT_FEEDBACK) mavlink_missionlib_send_gcs_string("Sent waypoint request"); //// if (verbose) // printf("Sent waypoint request %u to ID %u\n", wpr.seq, wpr.target_system);
-		
+
         // FIXME TIMING usleep(paramClient->getParamValue("PROTOCOLDELAY"));
     }
     else
@@ -215,14 +215,14 @@ void mavlink_wpm_send_waypoint_reached(uint16_t seq)
 {
     mavlink_message_t msg;
     mavlink_mission_item_reached_t wp_reached;
-	
+
     wp_reached.seq = seq;
-	
+
     mavlink_msg_mission_item_reached_encode(mavlink_system.sysid, mavlink_wpm_comp_id, &msg, &wp_reached);
     mavlink_missionlib_send_message(&msg);
-	
+
     if (MAVLINK_WPM_TEXT_FEEDBACK) mavlink_missionlib_send_gcs_string("Sent waypoint reached message"); //// if (verbose) // printf("Sent waypoint %u reached message\n", wp_reached.seq);
-	
+
     // FIXME TIMING usleep(paramClient->getParamValue("PROTOCOLDELAY"));
 }
 
@@ -231,10 +231,10 @@ void mavlink_wpm_send_waypoint_reached(uint16_t seq)
 //    if (seq < wpm.size)
 //    {
 //        mavlink_mission_item_t *cur = waypoints->at(seq);
-//		
+//
 //        const PxVector3 A(cur->x, cur->y, cur->z);
 //        const PxVector3 C(x, y, z);
-//		
+//
 //        // seq not the second last waypoint
 //        if ((uint16_t)(seq+1) < wpm.size)
 //        {
@@ -272,10 +272,10 @@ float mavlink_wpm_distance_to_point(uint16_t seq, float x, float y, float z)
 //    if (seq < wpm.size)
 //    {
 //        mavlink_mission_item_t *cur = waypoints->at(seq);
-//		
+//
 //        const PxVector3 A(cur->x, cur->y, cur->z);
 //        const PxVector3 C(x, y, z);
-//		
+//
 //        return (C-A).length();
 //    }
 //    else
@@ -301,13 +301,13 @@ void mavlink_wpm_loop()
         wpm.current_partner_sysid = 0;
         wpm.current_partner_compid = 0;
         wpm.current_wp_id = -1;
-		
+
         if(wpm.size == 0)
         {
             wpm.current_active_wp_id = -1;
         }
     }
-	
+
     if(now-wpm.timestamp_last_send_setpoint > wpm.delay_setpoint && wpm.current_active_wp_id < wpm.size)
     {
         mavlink_wpm_send_setpoint(wpm.current_active_wp_id);
@@ -351,24 +351,24 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
             }
             break;
         }
-			
+
 		case MAVLINK_MSG_ID_LOCAL_POSITION_NED:
         {
             if(msg->sysid == mavlink_system.sysid && wpm.current_active_wp_id < wpm.size)
             {
                 mavlink_mission_item_t *wp = &(wpm.waypoints[wpm.current_active_wp_id]);
-				
+
                 if(wp->frame == MAV_FRAME_LOCAL_ENU || MAV_FRAME_LOCAL_NED)
                 {
                     mavlink_local_position_ned_t pos;
                     mavlink_msg_local_position_ned_decode(msg, &pos);
                     //// if (debug) // printf("Received new position: x: %f | y: %f | z: %f\n", pos.x, pos.y, pos.z);
-					
+
                     wpm.pos_reached = false;
-					
+
                     // compare current position (given in message) with current waypoint
                     float orbit = wp->param1;
-					
+
                     float dist;
 //                    if (wp->param2 == 0)
 //                    {
@@ -379,7 +379,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 //                    {
                         dist = mavlink_wpm_distance_to_point(wpm.current_active_wp_id, pos.x, pos.y, pos.z);
 //                    }
-					
+
                     if (dist >= 0.f && dist <= orbit && wpm.yaw_reached)
                     {
                         wpm.pos_reached = true;
@@ -388,7 +388,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
             }
             break;
         }
-			
+
 //		case MAVLINK_MSG_ID_CMD: // special action from ground station
 //        {
 //            mavlink_cmd_t action;
@@ -408,19 +408,19 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 //						//					else
 //						//						// if (verbose) std::cerr << "No launch, waypointList empty" << std::endl;
 //						//					break;
-//						
+//
 //						//				case MAV_ACTION_CONTINUE:
 //						//					// if (verbose) std::c
 //						//					err << "Continue received" << std::endl;
 //						//					idle = false;
 //						//					setActive(waypoints[current_active_wp_id]);
 //						//					break;
-//						
+//
 //						//				case MAV_ACTION_HALT:
 //						//					// if (verbose) std::cerr << "Halt received" << std::endl;
 //						//					idle = true;
 //						//					break;
-//						
+//
 //						//				default:
 //						//					// if (verbose) std::cerr << "Unknown action received with id " << action.action << ", no action taken" << std::endl;
 //						//					break;
@@ -428,16 +428,16 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 //            }
 //            break;
 //        }
-			
+
 		case MAVLINK_MSG_ID_MISSION_ACK:
         {
             mavlink_mission_ack_t wpa;
             mavlink_msg_mission_ack_decode(msg, &wpa);
-			
+
             if((msg->sysid == wpm.current_partner_sysid && msg->compid == wpm.current_partner_compid) && (wpa.target_system == mavlink_system.sysid /*&& wpa.target_component == mavlink_wpm_comp_id*/))
             {
                 wpm.timestamp_lastaction = now;
-				
+
                 if (wpm.current_state == MAVLINK_WPM_STATE_SENDLIST || wpm.current_state == MAVLINK_WPM_STATE_SENDLIST_SENDWPS)
                 {
                     if (wpm.current_wp_id == wpm.size-1)
@@ -462,16 +462,16 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 			}
             break;
         }
-			
+
 		case MAVLINK_MSG_ID_MISSION_SET_CURRENT:
         {
             mavlink_mission_set_current_t wpc;
             mavlink_msg_mission_set_current_decode(msg, &wpc);
-			
+
             if(wpc.target_system == mavlink_system.sysid /*&& wpc.target_component == mavlink_wpm_comp_id*/)
             {
                 wpm.timestamp_lastaction = now;
-				
+
                 if (wpm.current_state == MAVLINK_WPM_STATE_IDLE)
                 {
                     if (wpc.seq < wpm.size)
@@ -529,7 +529,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 			}
             break;
         }
-			
+
 		case MAVLINK_MSG_ID_MISSION_REQUEST_LIST:
         {
             mavlink_mission_request_list_t wprl;
@@ -537,7 +537,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
             if(wprl.target_system == mavlink_system.sysid /*&& wprl.target_component == mavlink_wpm_comp_id*/)
             {
                 wpm.timestamp_lastaction = now;
-				
+
                 if (wpm.current_state == MAVLINK_WPM_STATE_IDLE || wpm.current_state == MAVLINK_WPM_STATE_SENDLIST)
                 {
                     if (wpm.size > 0)
@@ -568,7 +568,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 
             break;
         }
-			
+
 		case MAVLINK_MSG_ID_MISSION_REQUEST:
         {
             mavlink_mission_request_t wpr;
@@ -576,7 +576,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
             if(msg->sysid == wpm.current_partner_sysid && msg->compid == wpm.current_partner_compid && wpr.target_system == mavlink_system.sysid /*&& wpr.target_component == mavlink_wpm_comp_id*/)
             {
                 wpm.timestamp_lastaction = now;
-				
+
                 //ensure that we are in the correct state and that the first request has id 0 and the following requests have either the last id (re-send last waypoint) or last_id+1 (next waypoint)
                 if ((wpm.current_state == MAVLINK_WPM_STATE_SENDLIST && wpr.seq == 0) || (wpm.current_state == MAVLINK_WPM_STATE_SENDLIST_SENDWPS && (wpr.seq == wpm.current_wp_id || wpr.seq == wpm.current_wp_id + 1) && wpr.seq < wpm.size))
                 {
@@ -604,7 +604,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 		if (MAVLINK_WPM_VERBOSE) printf("Got MAVLINK_MSG_ID_MISSION_ITEM_REQUEST of waypoint %u (again) from %u staying in state MAVLINK_WPM_STATE_SENDLIST_SENDWPS\n", wpr.seq, msg->sysid);
 #endif
                     }
-					
+
                     wpm.current_state = MAVLINK_WPM_STATE_SENDLIST_SENDWPS;
                     wpm.current_wp_id = wpr.seq;
                     mavlink_wpm_send_waypoint(wpm.current_partner_sysid, wpm.current_partner_compid, wpr.seq);
@@ -686,7 +686,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
             }
             break;
         }
-			
+
 		case MAVLINK_MSG_ID_MISSION_COUNT:
         {
             mavlink_mission_count_t wpc;
@@ -694,7 +694,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
             if(wpc.target_system == mavlink_system.sysid/* && wpc.target_component == mavlink_wpm_comp_id*/)
             {
                 wpm.timestamp_lastaction = now;
-				
+
                 if (wpm.current_state == MAVLINK_WPM_STATE_IDLE || (wpm.current_state == MAVLINK_WPM_STATE_GETLIST && wpm.current_wp_id == 0))
                 {
                     if (wpc.count > 0)
@@ -715,13 +715,13 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 		if (MAVLINK_WPM_VERBOSE) printf("Got MAVLINK_MSG_ID_MISSION_ITEM_COUNT (%u) again from %u\n", wpc.count, msg->sysid);
 #endif
                         }
-						
+
                         wpm.current_state = MAVLINK_WPM_STATE_GETLIST;
                         wpm.current_wp_id = 0;
                         wpm.current_partner_sysid = msg->sysid;
                         wpm.current_partner_compid = msg->compid;
                         wpm.current_count = wpc.count;
-						
+
 #ifdef MAVLINK_WPM_NO_PRINTF
     	mavlink_missionlib_send_gcs_string("CLR RCV BUF: READY");
 #else
@@ -733,7 +733,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 //                            delete waypoints_receive_buffer->back();
 //                            waypoints_receive_buffer->pop_back();
 //                        }
-						
+
                         mavlink_wpm_send_waypoint_request(wpm.current_partner_sysid, wpm.current_partner_compid, wpm.current_wp_id);
                     }
                     else if (wpc.count == 0)
@@ -753,7 +753,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
                         wpm.yaw_reached = false;
                         wpm.pos_reached = false;
                         break;
-						
+
                     }
                     else
                     {
@@ -800,47 +800,47 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 		if (MAVLINK_WPM_VERBOSE) printf("IGNORED WAYPOINT COMMAND BECAUSE TARGET SYSTEM AND COMPONENT OR COMM PARTNER ID MISMATCH\n");
 #endif
 			}
-            
+
         }
 			break;
-			
+
 		case MAVLINK_MSG_ID_MISSION_ITEM:
         {
             mavlink_mission_item_t wp;
             mavlink_msg_mission_item_decode(msg, &wp);
-			
+
 			mavlink_missionlib_send_gcs_string("GOT WP");
-			
+
             if((msg->sysid == wpm.current_partner_sysid && msg->compid == wpm.current_partner_compid) && (wp.target_system == mavlink_system.sysid /*&& wp.target_component == mavlink_wpm_comp_id*/))
             {
                 wpm.timestamp_lastaction = now;
-				
+
                 //ensure that we are in the correct state and that the first waypoint has id 0 and the following waypoints have the correct ids
                 if ((wpm.current_state == MAVLINK_WPM_STATE_GETLIST && wp.seq == 0) || (wpm.current_state == MAVLINK_WPM_STATE_GETLIST_GETWPS && wp.seq == wpm.current_wp_id && wp.seq < wpm.current_count))
                 {
 //                    if (verbose && wpm.current_state == MAVLINK_WPM_STATE_GETLIST) // printf("Got MAVLINK_MSG_ID_MISSION_ITEM %u from %u changing state to MAVLINK_WPM_STATE_GETLIST_GETWPS\n", wp.seq, msg->sysid);
 //                    if (verbose && wpm.current_state == MAVLINK_WPM_STATE_GETLIST_GETWPS && wp.seq == wpm.current_wp_id) // printf("Got MAVLINK_MSG_ID_MISSION_ITEM %u from %u\n", wp.seq, msg->sysid);
 //                    if (verbose && wpm.current_state == MAVLINK_WPM_STATE_GETLIST_GETWPS && wp.seq-1 == wpm.current_wp_id) // printf("Got MAVLINK_MSG_ID_MISSION_ITEM %u (again) from %u\n", wp.seq, msg->sysid);
-//					
+//
                     wpm.current_state = MAVLINK_WPM_STATE_GETLIST_GETWPS;
                     mavlink_mission_item_t* newwp = &(wpm.rcv_waypoints[wp.seq]);
                     memcpy(newwp, &wp, sizeof(mavlink_mission_item_t));
 					wpm.current_wp_id = wp.seq + 1;
-					
+
                     // if (verbose) // printf ("Added new waypoint to list. X= %f\t Y= %f\t Z= %f\t Yaw= %f\n", newwp->x, newwp->y, newwp->z, newwp->param4);
-					
+
                     if(wpm.current_wp_id == wpm.current_count && wpm.current_state == MAVLINK_WPM_STATE_GETLIST_GETWPS)
                     {
 						mavlink_missionlib_send_gcs_string("GOT ALL WPS");
                         // if (verbose) // printf("Got all %u waypoints, changing state to MAVLINK_WPM_STATE_IDLE\n", wpm.current_count);
-						
+
                         mavlink_wpm_send_waypoint_ack(wpm.current_partner_sysid, wpm.current_partner_compid, 0);
-						
+
                         if (wpm.current_active_wp_id > wpm.rcv_size-1)
                         {
                             wpm.current_active_wp_id = wpm.rcv_size-1;
                         }
-						
+
                         // switch the waypoints list
 						// FIXME CHECK!!!
 						for (int i = 0; i < wpm.current_count; ++i)
@@ -848,7 +848,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
 							wpm.waypoints[i] = wpm.rcv_waypoints[i];
 						}
 						wpm.size = wpm.current_count;
-						
+
                         //get the new current waypoint
                         uint32_t i;
                         for(i = 0; i < wpm.size; i++)
@@ -865,7 +865,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
                                 break;
                             }
                         }
-						
+
                         if (i == wpm.size)
                         {
                             wpm.current_active_wp_id = -1;
@@ -873,7 +873,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
                             wpm.pos_reached = false;
                             wpm.timestamp_firstinside_orbit = 0;
                         }
-						
+
                         wpm.current_state = MAVLINK_WPM_STATE_IDLE;
                     }
                     else
@@ -943,16 +943,16 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
             }
             break;
         }
-			
+
 		case MAVLINK_MSG_ID_MISSION_CLEAR_ALL:
         {
             mavlink_mission_clear_all_t wpca;
             mavlink_msg_mission_clear_all_decode(msg, &wpca);
-			
+
             if(wpca.target_system == mavlink_system.sysid /*&& wpca.target_component == mavlink_wpm_comp_id */ && wpm.current_state == MAVLINK_WPM_STATE_IDLE)
             {
                 wpm.timestamp_lastaction = now;
-				
+
                 // if (verbose) // printf("Got MAVLINK_MSG_ID_MISSION_ITEM_CLEAR_LIST from %u deleting all waypoints\n", msg->sysid);
                 // Delete all waypoints
 				wpm.size = 0;
@@ -966,21 +966,21 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
             }
             break;
         }
-			
+
 		default:
         {
             // if (debug) // printf("Waypoint: received message of unknown type");
             break;
         }
     }
-	
+
     //check if the current waypoint was reached
     if (wpm.pos_reached /*wpm.yaw_reached &&*/ && !wpm.idle)
     {
         if (wpm.current_active_wp_id < wpm.size)
         {
             mavlink_mission_item_t *cur_wp = &(wpm.waypoints[wpm.current_active_wp_id]);
-			
+
             if (wpm.timestamp_firstinside_orbit == 0)
             {
                 // Announce that last waypoint was reached
@@ -988,7 +988,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
                 mavlink_wpm_send_waypoint_reached(cur_wp->seq);
                 wpm.timestamp_firstinside_orbit = now;
             }
-			
+
             // check if the MAV was long enough inside the waypoint orbit
             //if (now-timestamp_lastoutside_orbit > (cur_wp->hold_time*1000))
             if(now-wpm.timestamp_firstinside_orbit >= cur_wp->param2*1000)
@@ -1007,7 +1007,7 @@ void mavlink_wpm_message_handler(const mavlink_message_t* msg)
                         if ((uint16_t)(wpm.current_active_wp_id + 1) < wpm.size)
                             wpm.current_active_wp_id++;
                     }
-					
+
                     // Fly to next waypoint
                     wpm.timestamp_firstinside_orbit = 0;
                     mavlink_wpm_send_waypoint_current(wpm.current_active_wp_id);

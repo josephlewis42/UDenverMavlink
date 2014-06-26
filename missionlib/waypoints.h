@@ -1,24 +1,28 @@
 /*******************************************************************************
- 
+
  Copyright (C) 2011 Lorenz Meier lm ( a t ) inf.ethz.ch
- 
+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  ****************************************************************************/
+
+#ifndef MAVLINK_WAYPOINTS_H
+#define MAVLINK_WAYPOINTS_H
 
 /* This assumes you have the mavlink headers on your include path
  or in the same folder as this source file */
+
 
 // Disable auto-data structures
 #ifndef MAVLINK_NO_DATA
@@ -31,6 +35,8 @@ extern void mavlink_send_uart_bytes(mavlink_channel_t chan, uint8_t* buffer, uin
 #ifndef MAVLINK_SEND_UART_BYTES
 #define MAVLINK_SEND_UART_BYTES(chan, buffer, len) mavlink_send_uart_bytes(chan, buffer, len)
 #endif
+
+
 extern mavlink_system_t mavlink_system;
 #include <mavlink.h>
 #include <stdbool.h>
@@ -102,3 +108,6 @@ typedef struct mavlink_wpm_storage mavlink_wpm_storage;
 void mavlink_wpm_init(mavlink_wpm_storage* state);
 void mavlink_wpm_loop();
 void mavlink_wpm_message_handler(const mavlink_message_t* msg);
+
+
+#endif
