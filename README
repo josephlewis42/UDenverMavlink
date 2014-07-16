@@ -1,1 +1,3 @@
 This directory should be located alongside the 'autopilot' and 'UDenverQGC' directories.
+
+Add/modify message definitions in the 'message_definitions' directory. Message header code is automatically generated when the autopilot is compiled with 'make'.
