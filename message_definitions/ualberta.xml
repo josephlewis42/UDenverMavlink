@@ -45,6 +45,7 @@
                <entry name="UALBERTA_INIT_ATTITUDE"/>
 	       <entry name="UALBERTA_SET_REF_POS"/>
                <entry name="UALBERTA_SHUTDOWN"/>
+               <entry name="UALBERTA_NEW_LOG_POINT"/>
           </enum>
      </enums>
      <messages>
