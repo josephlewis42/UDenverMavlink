@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_servo_output_raw_t
 {
- uint32_t time_usec; ///< Timestamp (since UNIX epoch or microseconds since system boot)
+ uint32_t time_usec; ///< Timestamp (microseconds since system boot)
  uint16_t servo1_raw; ///< Servo output 1 value, in microseconds
  uint16_t servo2_raw; ///< Servo output 2 value, in microseconds
  uint16_t servo3_raw; ///< Servo output 3 value, in microseconds
@@ -47,7 +47,7 @@ typedef struct __mavlink_servo_output_raw_t
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param time_usec Timestamp (since UNIX epoch or microseconds since system boot)
+ * @param time_usec Timestamp (microseconds since system boot)
  * @param port Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
  * @param servo1_raw Servo output 1 value, in microseconds
  * @param servo2_raw Servo output 2 value, in microseconds
@@ -106,7 +106,7 @@ static inline uint16_t mavlink_msg_servo_output_raw_pack(uint8_t system_id, uint
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param time_usec Timestamp (since UNIX epoch or microseconds since system boot)
+ * @param time_usec Timestamp (microseconds since system boot)
  * @param port Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
  * @param servo1_raw Servo output 1 value, in microseconds
  * @param servo2_raw Servo output 2 value, in microseconds
@@ -191,7 +191,7 @@ static inline uint16_t mavlink_msg_servo_output_raw_encode_chan(uint8_t system_i
  * @brief Send a servo_output_raw message
  * @param chan MAVLink channel to send the message
  *
- * @param time_usec Timestamp (since UNIX epoch or microseconds since system boot)
+ * @param time_usec Timestamp (microseconds since system boot)
  * @param port Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
  * @param servo1_raw Servo output 1 value, in microseconds
  * @param servo2_raw Servo output 2 value, in microseconds
@@ -303,7 +303,7 @@ static inline void mavlink_msg_servo_output_raw_send_buf(mavlink_message_t *msgb
 /**
  * @brief Get field time_usec from servo_output_raw message
  *
- * @return Timestamp (since UNIX epoch or microseconds since system boot)
+ * @return Timestamp (microseconds since system boot)
  */
 static inline uint32_t mavlink_msg_servo_output_raw_get_time_usec(const mavlink_message_t* msg)
 {

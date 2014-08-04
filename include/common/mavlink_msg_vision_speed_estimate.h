@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_vision_speed_estimate_t
 {
- uint64_t usec; ///< Timestamp (milliseconds)
+ uint64_t usec; ///< Timestamp (microseconds, synced to UNIX time or since system boot)
  float x; ///< Global X speed
  float y; ///< Global Y speed
  float z; ///< Global Z speed
@@ -35,7 +35,7 @@ typedef struct __mavlink_vision_speed_estimate_t
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param usec Timestamp (milliseconds)
+ * @param usec Timestamp (microseconds, synced to UNIX time or since system boot)
  * @param x Global X speed
  * @param y Global Y speed
  * @param z Global Z speed
@@ -76,7 +76,7 @@ static inline uint16_t mavlink_msg_vision_speed_estimate_pack(uint8_t system_id,
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param usec Timestamp (milliseconds)
+ * @param usec Timestamp (microseconds, synced to UNIX time or since system boot)
  * @param x Global X speed
  * @param y Global Y speed
  * @param z Global Z speed
@@ -143,7 +143,7 @@ static inline uint16_t mavlink_msg_vision_speed_estimate_encode_chan(uint8_t sys
  * @brief Send a vision_speed_estimate message
  * @param chan MAVLink channel to send the message
  *
- * @param usec Timestamp (milliseconds)
+ * @param usec Timestamp (microseconds, synced to UNIX time or since system boot)
  * @param x Global X speed
  * @param y Global Y speed
  * @param z Global Z speed
@@ -225,7 +225,7 @@ static inline void mavlink_msg_vision_speed_estimate_send_buf(mavlink_message_t 
 /**
  * @brief Get field usec from vision_speed_estimate message
  *
- * @return Timestamp (milliseconds)
+ * @return Timestamp (microseconds, synced to UNIX time or since system boot)
  */
 static inline uint64_t mavlink_msg_vision_speed_estimate_get_usec(const mavlink_message_t* msg)
 {

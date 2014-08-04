@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_set_global_position_setpoint_int_t
 {
- int32_t latitude; ///< WGS84 Latitude position in degrees * 1E7
- int32_t longitude; ///< WGS84 Longitude position in degrees * 1E7
- int32_t altitude; ///< WGS84 Altitude in meters * 1000 (positive for up)
+ int32_t latitude; ///< Latitude (WGS84), in degrees * 1E7
+ int32_t longitude; ///< Longitude (WGS84), in degrees * 1E7
+ int32_t altitude; ///< Altitude (WGS84), in meters * 1000 (positive for up)
  int16_t yaw; ///< Desired yaw angle in degrees * 100
  uint8_t coordinate_frame; ///< Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
 } mavlink_set_global_position_setpoint_int_t;
@@ -38,9 +38,9 @@ typedef struct __mavlink_set_global_position_setpoint_int_t
  * @param msg The MAVLink message to compress the data into
  *
  * @param coordinate_frame Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
- * @param latitude WGS84 Latitude position in degrees * 1E7
- * @param longitude WGS84 Longitude position in degrees * 1E7
- * @param altitude WGS84 Altitude in meters * 1000 (positive for up)
+ * @param latitude Latitude (WGS84), in degrees * 1E7
+ * @param longitude Longitude (WGS84), in degrees * 1E7
+ * @param altitude Altitude (WGS84), in meters * 1000 (positive for up)
  * @param yaw Desired yaw angle in degrees * 100
  * @return length of the message in bytes (excluding serial stream start sign)
  */
@@ -82,9 +82,9 @@ static inline uint16_t mavlink_msg_set_global_position_setpoint_int_pack(uint8_t
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
  * @param coordinate_frame Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
- * @param latitude WGS84 Latitude position in degrees * 1E7
- * @param longitude WGS84 Longitude position in degrees * 1E7
- * @param altitude WGS84 Altitude in meters * 1000 (positive for up)
+ * @param latitude Latitude (WGS84), in degrees * 1E7
+ * @param longitude Longitude (WGS84), in degrees * 1E7
+ * @param altitude Altitude (WGS84), in meters * 1000 (positive for up)
  * @param yaw Desired yaw angle in degrees * 100
  * @return length of the message in bytes (excluding serial stream start sign)
  */
@@ -152,9 +152,9 @@ static inline uint16_t mavlink_msg_set_global_position_setpoint_int_encode_chan(
  * @param chan MAVLink channel to send the message
  *
  * @param coordinate_frame Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
- * @param latitude WGS84 Latitude position in degrees * 1E7
- * @param longitude WGS84 Longitude position in degrees * 1E7
- * @param altitude WGS84 Altitude in meters * 1000 (positive for up)
+ * @param latitude Latitude (WGS84), in degrees * 1E7
+ * @param longitude Longitude (WGS84), in degrees * 1E7
+ * @param altitude Altitude (WGS84), in meters * 1000 (positive for up)
  * @param yaw Desired yaw angle in degrees * 100
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
@@ -248,7 +248,7 @@ static inline uint8_t mavlink_msg_set_global_position_setpoint_int_get_coordinat
 /**
  * @brief Get field latitude from set_global_position_setpoint_int message
  *
- * @return WGS84 Latitude position in degrees * 1E7
+ * @return Latitude (WGS84), in degrees * 1E7
  */
 static inline int32_t mavlink_msg_set_global_position_setpoint_int_get_latitude(const mavlink_message_t* msg)
 {
@@ -258,7 +258,7 @@ static inline int32_t mavlink_msg_set_global_position_setpoint_int_get_latitude(
 /**
  * @brief Get field longitude from set_global_position_setpoint_int message
  *
- * @return WGS84 Longitude position in degrees * 1E7
+ * @return Longitude (WGS84), in degrees * 1E7
  */
 static inline int32_t mavlink_msg_set_global_position_setpoint_int_get_longitude(const mavlink_message_t* msg)
 {
@@ -268,7 +268,7 @@ static inline int32_t mavlink_msg_set_global_position_setpoint_int_get_longitude
 /**
  * @brief Get field altitude from set_global_position_setpoint_int message
  *
- * @return WGS84 Altitude in meters * 1000 (positive for up)
+ * @return Altitude (WGS84), in meters * 1000 (positive for up)
  */
 static inline int32_t mavlink_msg_set_global_position_setpoint_int_get_altitude(const mavlink_message_t* msg)
 {

@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_set_gps_global_origin_t
 {
- int32_t latitude; ///< global position * 1E7
- int32_t longitude; ///< global position * 1E7
- int32_t altitude; ///< global position * 1000
+ int32_t latitude; ///< Latitude (WGS84), in degrees * 1E7
+ int32_t longitude; ///< Longitude (WGS84, in degrees * 1E7
+ int32_t altitude; ///< Altitude (WGS84), in meters * 1000 (positive for up)
  uint8_t target_system; ///< System ID
 } mavlink_set_gps_global_origin_t;
 
@@ -36,9 +36,9 @@ typedef struct __mavlink_set_gps_global_origin_t
  * @param msg The MAVLink message to compress the data into
  *
  * @param target_system System ID
- * @param latitude global position * 1E7
- * @param longitude global position * 1E7
- * @param altitude global position * 1000
+ * @param latitude Latitude (WGS84), in degrees * 1E7
+ * @param longitude Longitude (WGS84, in degrees * 1E7
+ * @param altitude Altitude (WGS84), in meters * 1000 (positive for up)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_set_gps_global_origin_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
@@ -77,9 +77,9 @@ static inline uint16_t mavlink_msg_set_gps_global_origin_pack(uint8_t system_id,
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
  * @param target_system System ID
- * @param latitude global position * 1E7
- * @param longitude global position * 1E7
- * @param altitude global position * 1000
+ * @param latitude Latitude (WGS84), in degrees * 1E7
+ * @param longitude Longitude (WGS84, in degrees * 1E7
+ * @param altitude Altitude (WGS84), in meters * 1000 (positive for up)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_set_gps_global_origin_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
@@ -144,9 +144,9 @@ static inline uint16_t mavlink_msg_set_gps_global_origin_encode_chan(uint8_t sys
  * @param chan MAVLink channel to send the message
  *
  * @param target_system System ID
- * @param latitude global position * 1E7
- * @param longitude global position * 1E7
- * @param altitude global position * 1000
+ * @param latitude Latitude (WGS84), in degrees * 1E7
+ * @param longitude Longitude (WGS84, in degrees * 1E7
+ * @param altitude Altitude (WGS84), in meters * 1000 (positive for up)
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
@@ -235,7 +235,7 @@ static inline uint8_t mavlink_msg_set_gps_global_origin_get_target_system(const 
 /**
  * @brief Get field latitude from set_gps_global_origin message
  *
- * @return global position * 1E7
+ * @return Latitude (WGS84), in degrees * 1E7
  */
 static inline int32_t mavlink_msg_set_gps_global_origin_get_latitude(const mavlink_message_t* msg)
 {
@@ -245,7 +245,7 @@ static inline int32_t mavlink_msg_set_gps_global_origin_get_latitude(const mavli
 /**
  * @brief Get field longitude from set_gps_global_origin message
  *
- * @return global position * 1E7
+ * @return Longitude (WGS84, in degrees * 1E7
  */
 static inline int32_t mavlink_msg_set_gps_global_origin_get_longitude(const mavlink_message_t* msg)
 {
@@ -255,7 +255,7 @@ static inline int32_t mavlink_msg_set_gps_global_origin_get_longitude(const mavl
 /**
  * @brief Get field altitude from set_gps_global_origin message
  *
- * @return global position * 1000
+ * @return Altitude (WGS84), in meters * 1000 (positive for up)
  */
 static inline int32_t mavlink_msg_set_gps_global_origin_get_altitude(const mavlink_message_t* msg)
 {

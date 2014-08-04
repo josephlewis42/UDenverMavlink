@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_vicon_position_estimate_t
 {
- uint64_t usec; ///< Timestamp (milliseconds)
+ uint64_t usec; ///< Timestamp (microseconds, synced to UNIX time or since system boot)
  float x; ///< Global X position
  float y; ///< Global Y position
  float z; ///< Global Z position
@@ -41,7 +41,7 @@ typedef struct __mavlink_vicon_position_estimate_t
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param usec Timestamp (milliseconds)
+ * @param usec Timestamp (microseconds, synced to UNIX time or since system boot)
  * @param x Global X position
  * @param y Global Y position
  * @param z Global Z position
@@ -91,7 +91,7 @@ static inline uint16_t mavlink_msg_vicon_position_estimate_pack(uint8_t system_i
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param usec Timestamp (milliseconds)
+ * @param usec Timestamp (microseconds, synced to UNIX time or since system boot)
  * @param x Global X position
  * @param y Global Y position
  * @param z Global Z position
@@ -167,7 +167,7 @@ static inline uint16_t mavlink_msg_vicon_position_estimate_encode_chan(uint8_t s
  * @brief Send a vicon_position_estimate message
  * @param chan MAVLink channel to send the message
  *
- * @param usec Timestamp (milliseconds)
+ * @param usec Timestamp (microseconds, synced to UNIX time or since system boot)
  * @param x Global X position
  * @param y Global Y position
  * @param z Global Z position
@@ -264,7 +264,7 @@ static inline void mavlink_msg_vicon_position_estimate_send_buf(mavlink_message_
 /**
  * @brief Get field usec from vicon_position_estimate message
  *
- * @return Timestamp (milliseconds)
+ * @return Timestamp (microseconds, synced to UNIX time or since system boot)
  */
 static inline uint64_t mavlink_msg_vicon_position_estimate_get_usec(const mavlink_message_t* msg)
 {
